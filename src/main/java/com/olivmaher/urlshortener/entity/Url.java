@@ -15,7 +15,7 @@ public class Url {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String originalUrl;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String shortCode;
 
     @Column(name = "created_at")
