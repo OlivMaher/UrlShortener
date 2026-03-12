@@ -1,7 +1,11 @@
 package com.olivmaher.urlshortener.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class ShortenRequest {
 
+    @NotBlank(message = "URL is required")
+    @org.hibernate.validator.constraints.URL(message = "Invalid URL format")
     private String originalUrl;
 
     public String getOriginalUrl() {

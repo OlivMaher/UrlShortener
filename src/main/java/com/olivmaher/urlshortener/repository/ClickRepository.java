@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ClickRepository extends JpaRepository<Click, Long> {
 
-    Long countByUrl(Url url);
+    long countByUrl(Url url);
 }

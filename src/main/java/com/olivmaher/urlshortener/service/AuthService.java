@@ -4,6 +4,8 @@ import com.olivmaher.urlshortener.dto.AuthResponse;
 import com.olivmaher.urlshortener.dto.LoginRequest;
 import com.olivmaher.urlshortener.dto.RegisterRequest;
 import com.olivmaher.urlshortener.entity.User;
+import com.olivmaher.urlshortener.exception.DuplicateResourceException;
+import com.olivmaher.urlshortener.exception.ResourceNotFoundException;
 import com.olivmaher.urlshortener.repository.UserRepository;
 import com.olivmaher.urlshortener.util.JwtUtil;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,7 +32,7 @@ public class AuthService {
 
     public AuthResponse register(RegisterRequest req){
         if(userRepository.findByEmail(req.getEmail()).isPresent()){
-            throw new RuntimeException("User Already Exists");
+            throw new DuplicateResourceException("User Already Exists");
         }
         User user = new User(req.getEmail(), bCryptPasswordEncoder.encode(req.getPassword()));
         userRepository.save(user);
@@ -42,7 +44,7 @@ public class AuthService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(req.getEmail(), req.getPassword())
         );
-        User user = userRepository.findByEmail(req.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmail(req.getEmail()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         String token = jwtUtil.generateToken(user);
 
         return new AuthResponse(token);
